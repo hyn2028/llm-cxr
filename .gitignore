@@ -1,0 +1,14 @@
+.dbx/
+venv/
+.venv/
+.idea/
+.python-version
+__pycache__/
+htmlcov/
+.pytest_cache/
+.coverage
+.ipynb_checkpoints
+dolly__*
+data
+wandb
+.hypothesis

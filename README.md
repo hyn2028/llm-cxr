@@ -2,14 +2,14 @@
 
 This repository is the official implementation of the paper [LLM Itself Can Read and Generate CXR Images (arxiv)](https://arxiv.org/abs/2305.11490v1).
 
-![llm2cxr](https://github.com/hyn2028/llm-cxr/assets/5181065/0730f742-627d-4127-83ea-c5af15321d3f)
+![llm2cxr](https://github.com/hyn2028/llm-cxr/assets/5181065/b0c12395-c003-4901-bde9-9ecfe8272079)
 
 ## Generation Example
 For more generation examples, see the paper on [arxiv](https://arxiv.org/abs/2305.11490v1).
 ### Report-to-CXR
-![cxr_gen](https://github.com/hyn2028/llm-cxr/assets/5181065/f6beca4d-e33e-4d80-9829-02980e9765e4)
+![cxr_gen](https://github.com/hyn2028/llm-cxr/assets/5181065/75cd2498-a2c6-4f40-9a38-356b465e01ad)
 ### CXR-to-Report 
-![report_gen](https://github.com/hyn2028/llm-cxr/assets/5181065/ac069f43-c294-4f49-a98d-80aa0a9c5725)
+![report_gen](https://github.com/hyn2028/llm-cxr/assets/5181065/e3bc49ec-328b-4e57-961a-375bf0ac88ac)
 
 
 ## Install Dependencies

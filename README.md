@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ## Prepare Data
 1. MIMIC-CXR report: Download `mimic-cxr-reports.zip` file from the [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/) dataset, unzip it, and place the `files` directory into the `data/mimic-cxr-reports` directory. To access the `MIMIC-CXR` dataset, appropriate credentials are required.
 
-1. Quantized latent vector of `MIMIC-CXR` images: Download from [here](https://drive.google.com/file/d/1cSyx8zFrGFkCIIuwhPKP3BGjCXn-J_p9/view?usp=sharing) and put it in `data/` directory. This is a dictionary of pairs of dicom id corresponding to MIMIC-CXR images and their quantized latent vectors.
+1. Quantized latent vector of `MIMIC-CXR` images: Convert 256x256 images from the MIMIC-CXR dataset to quantized latent vectors using the pre-trained VQ-GAN encoder presented below. Create a dictionary that maps from dicom_id to the latent vector and save it as `mimiccxr_vqgan1024_res256_3e_codebook_indices.pickle` file. Put it in `data/` directory. The latent vector must be in the form of a list of integers.
 
 1. Instruction following dataset: Download `databricks-dolly-15k.jsonl` file from [here](https://huggingface.co/datasets/databricks/databricks-dolly-15k) and put it in `data/` directory. This is used to preserve the natural language instruction following ability.
 

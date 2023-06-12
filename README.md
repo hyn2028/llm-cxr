@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ## Prepare Data
 1. MIMIC-CXR report: Download `mimic-cxr-reports.zip` file from the [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/) dataset, unzip it, and place the `files` directory into the `data/mimic-cxr-reports` directory. To access the `MIMIC-CXR` dataset, appropriate credentials are required.
 
-1. Quantized latent vector of `MIMIC-CXR` images: Convert 256x256 images from the MIMIC-CXR dataset to quantized latent vectors using the pre-trained VQ-GAN encoder presented below. Create a dictionary that maps from dicom_id to the latent vector and save it as `mimiccxr_vqgan1024_res256_3e_codebook_indices.pickle` file. Put it in `data/` directory. The latent vector must be in the form of a list of integers.
+1. Quantized latent vector of `MIMIC-CXR` images: Convert 256x256 images from the MIMIC-CXR dataset to quantized latent vectors using the pre-trained VQ-GAN encoder presented below. Create a dictionary that maps from dicom_id to the latent vector and save it as `mimiccxr_vqgan1024_res256_3e_codebook_indices.pickle` file. Put it in `data/` directory. The latent vector must be in the form of a list of integers. See the "Encode and Decode Images" section below for how to use the encoder.
 
 1. Instruction following dataset: Download `databricks-dolly-15k.jsonl` file from [here](https://huggingface.co/datasets/databricks/databricks-dolly-15k) and put it in `data/` directory. This is used to preserve the natural language instruction following ability.
 
@@ -50,7 +50,7 @@ python generate_llmcxr.py --model_path <path to the trained model>
 Examples of natural language instruction following tasks, CXR-to-Report, and Report-to-CXR tasks are executed sequentially.
 
 ## Encode and Decoded Images
-As an image encoder and decoder (like an autoencoder) we use `VQ-GAN` ([arxiv](https://arxiv.org/abs/2012.09841)). Refer to that [repository](https://github.com/CompVis/taming-transformers) to perform encoding and decoding of CXR images.
+As an image encoder and decoder (like an autoencoder) we use `VQ-GAN` ([arxiv](https://arxiv.org/abs/2012.09841)). Refer to that [repository](https://github.com/CompVis/taming-transformers) to perform encoding and decoding of CXR images. Sample code files for encoding and decoding are `encode_mimic_cxr.py` and `decode_mimic_cxr.py` respectively. Move those sample codes to the root directory of `VQ-GAN` (taming-transformers) project and run them. For library dependencies, follow the appropriate project. Don't forget to modify that code to match your VQ-GAN's checkpoint location.
 
 ## Pretrained Models
 We provide all checkpoints used in the paper to generate and evaluate results. See the paper for details regarding training of uploaded checkpoints.

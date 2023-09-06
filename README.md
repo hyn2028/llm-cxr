@@ -42,15 +42,29 @@ Before running, modify the environment variable `input_model` in the `train_llmc
 ### Training Tips
 The current settings are geared towards `NVIDIA A100 40GB x8`, but if you change the `DeepSpeed` settings, you can also train on smaller GPUs like `NVIDIA GeForceRTX 3090 24GB x2`. Please refer to the original [code base repository](https://github.com/databrickslabs/dolly) and change the `DeepSpeed` settings (`config/ds_z3_bf16_config.json`) accordingly. Also adjust the `--num_gpus` argument in the `train_llmcxr_stage*.sh` file to match the number of GPUs.
 
-## Test Model
-Execute the shell script below to test the trained model.
-```bash
-python generate_llmcxr.py --model_path <path to the trained model>
-```
-Examples of natural language instruction following tasks, CXR-to-Report, and Report-to-CXR tasks are executed sequentially.
+## Inference
 
-## Encode and Decoded Images
-As an image encoder and decoder (like an autoencoder) we use `VQ-GAN` ([arxiv](https://arxiv.org/abs/2012.09841)). Refer to that [repository](https://github.com/CompVis/taming-transformers) to perform encoding and decoding of CXR images. Sample code files for encoding and decoding are `encode_mimic_cxr.py` and `decode_mimic_cxr.py` respectively. Move those sample codes to the root directory of `VQ-GAN` (taming-transformers) project and run them. For library dependencies, follow the appropriate project. Don't forget to modify that code to match your VQ-GAN's checkpoint location.
+Place the downloaded pretrained LLM checkpoint (llmcxr_checkpoint-v3-1e+v2-2e.pth) in folder named 'checkpoints'.
+Place the vqgan config and checkpoint files (2023-05-11T23-37-27-project.yaml, vqgan_last3d.ckpt) in a folder named 'vqgan'.
+
+```bash
+# clone this repository and move into it
+git clone https://github.com/hyn2028/llm-cxr.git
+cd llm-cxr
+
+# create a new conda environment (with python3.9) and activate it
+conda create -n llmcxr python=3.9
+conda activate llmcxr
+
+# install pytorch, torchvision, and pytorch-cuda
+conda install pytorch torchvision pytorch-cuda=11.8 -c pytorch -c nvidia
+
+# install dependencies
+pip install -r requirements.txt
+
+# Run inference.py
+python inference.py --model_path /path/to/llmcxr_checkpoint/
+```
 
 ## Pretrained Models
 We provide all checkpoints used in the paper to generate and evaluate results. See the paper for details regarding training of uploaded checkpoints.

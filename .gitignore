@@ -12,3 +12,5 @@ dolly__*
 data
 wandb
 .hypothesis
+checkpoints
+vqgan

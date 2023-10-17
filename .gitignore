@@ -1,3 +1,4 @@
+# Byte-compiled / optimized / DLL files
 .dbx/
 venv/
 .venv/
@@ -8,7 +9,18 @@ htmlcov/
 .pytest_cache/
 .coverage
 .ipynb_checkpoints
-dolly__*
-data
 wandb
 .hypothesis
+
+# checkpoints
+dolly__*
+/ckpts
+
+# data
+/data/mimic-cxr-jpg/mimic-cxr-jpg_medvqa_v1
+/data/mimic-cxr-256-txvloss_codebook_indices.pickle
+/data/databricks-dolly-15k.jsonl
+/data/mimic-cxr-jpg/reports
+/data/mimic-cxr-jpg/i2t_qna
+/data/mimic-cxr-jpg/mimic-cxr-2.0.0-metadata.csv
+/data/mimic-cxr-jpg/mimic-cxr-2.0.0-split.csv

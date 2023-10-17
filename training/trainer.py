@@ -49,6 +49,7 @@ from .mimiccxr_vq_dataset import (
     CXR_VQ_CODE_BOOK_SIZE, 
     CXR_VQ_VQ_LEN
 )
+from .mimiccxr_vqa_dataset import MimicCxrVqaDataset
 
 logger = logging.getLogger(__name__)
 ROOT_PATH = Path(__file__).parent.parent
@@ -144,17 +145,28 @@ def load_training_dataset(path_or_dataset: str = "./data/databricks-dolly-15k.js
 
 def load_training_dataset_mimiccxrvq(tokenizer_len, stage) -> Dataset:
     logger.info(f"Loading dataset from MIMIC-CXR-VQ-Dataset")
-    dataset_train = MimicCxrVqDataset("data/mimic-cxr-reports", 
-                                      "data/mimiccxr_vqgan1024_res256_3e_codebook_indices.pickle", 
+    dataset_bid_train = MimicCxrVqDataset("data/mimic-cxr-jpg", 
+                                      "data/mimic-cxr-256-txvloss_codebook_indices.pickle", 
                                       tokenizer_len, 
                                       "train",
                                       stage)
-    dataset_test  = MimicCxrVqDataset("data/mimic-cxr-reports", 
-                                      "data/mimiccxr_vqgan1024_res256_3e_codebook_indices.pickle", 
+    dataset_bid_test  = MimicCxrVqDataset("data/mimic-cxr-jpg", 
+                                      "data/mimic-cxr-256-txvloss_codebook_indices.pickle", 
                                       tokenizer_len, 
                                       "test",
                                       stage)
+    dataset_vqa_train = MimicCxrVqaDataset("data/mimic-cxr-jpg",
+                                           "data/mimic-cxr-256-txvloss_codebook_indices.pickle",
+                                           tokenizer_len,
+                                           "train")
+    dataset_vqa_test = MimicCxrVqaDataset("data/mimic-cxr-jpg",
+                                          "data/mimic-cxr-256-txvloss_codebook_indices.pickle",
+                                          tokenizer_len,
+                                          "test")
     
+    dataset_train = dataset_bid_train + dataset_vqa_train
+    dataset_test = dataset_bid_test + dataset_vqa_test
+
     dataset_train = Dataset.from_list(dataset_train)
     dataset_test = Dataset.from_list(dataset_test)
 
@@ -162,10 +174,12 @@ def load_training_dataset_mimiccxrvq(tokenizer_len, stage) -> Dataset:
 
     def _add_text(rec):
         if rec['io_type'] == 'input':
-            rec["text"] = PROMPT_WITH_INPUT_FORMAT.format(instruction=sample_cxr_vq_input_instruction(), 
+            instruction = rec["instruction"] if rec["instruction"] is not None else sample_cxr_vq_input_instruction()
+            rec["text"] = PROMPT_WITH_INPUT_FORMAT.format(instruction=instruction,
                                                       response=rec['report'], 
                                                       input=CXR_VQ_VQ_REPLACE_TEMPLATE)
         elif rec['io_type'] == 'output':
+            assert rec["instruction"] is None
             rec["text"] = PROMPT_WITH_INPUT_FORMAT.format(instruction=sample_cxr_vq_output_instruction(), 
                                                       response=CXR_VQ_VQ_REPLACE_TEMPLATE, 
                                                       input=rec['report'])
@@ -175,8 +189,8 @@ def load_training_dataset_mimiccxrvq(tokenizer_len, stage) -> Dataset:
         
         return rec
 
-    dataset_train = dataset_train.map(_add_text, remove_columns="report")
-    dataset_test = dataset_test.map(_add_text, remove_columns="report")
+    dataset_train = dataset_train.map(_add_text, remove_columns=["report", "instruction"])
+    dataset_test = dataset_test.map(_add_text, remove_columns=["report", "instruction"])
 
     return dataset_train, dataset_test
 
@@ -297,7 +311,7 @@ def train(
     test_size: Union[float, int],
     save_total_limit: int,
     warmup_steps: int,
-    stage: str,
+    stage: int,
 ):
     set_seed(seed)
 

@@ -89,7 +89,8 @@ class MimicCxrVqDataset(Dataset):
                     report = self._load_report(dicom_id, parse_fun_map[stage])
                     self.outputs.append({"report": report, 
                                         "cxr_vq_shifted": cxr_vq_shifted,
-                                        "io_type": io_type})
+                                        "io_type": io_type,
+                                        "instruction": None})
                 except:
                     continue
         
@@ -113,7 +114,7 @@ class MimicCxrVqDataset(Dataset):
         study_id = "s" + db_series["study_id"] + ".txt"
         subject_id_prefix = subject_id[:3]
 
-        return self.report_path / Path("files") / Path(subject_id_prefix) / Path(subject_id) / Path(study_id)
+        return self.report_path / Path("reports/files") / Path(subject_id_prefix) / Path(subject_id) / Path(study_id)
     
 
     def _load_report(self, dicom_id: str, parse_fun):

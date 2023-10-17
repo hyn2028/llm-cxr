@@ -72,7 +72,7 @@ You can access the demo server at `http://localhost:7860/` in your browser.
 1. MIMIC-CXR-VQA datset: Download the `MIMIC-CXR-MEDVQA` dataset from [here](https://drive.google.com/file/d/10W3zohsNnTMVjbKXDNl5INmffVeepH95/view?usp=sharing) which is a synthesized VQA dataset using the MIMIC-CXR report through LLM. Unzip the downloaded file and place the `mimic-cxr-medvqa_v1` directory in the `data/mimic-cxr-jpg/` directory.
 
 
-1. Instruction following dataset: Download `databricks-dolly-15k.jsonl` file from [here](https://huggingface.co/datasets/databricks/databricks-dolly-15k) and put it in `data/` directory.
+1. Instruction following dataset: Download `databricks-dolly-15k.jsonl` file from [here](https://huggingface.co/datasets/databricks/databricks-dolly-15k/tree/orig_dataset) and put it in `data/` directory.
 
 Your final directory structure should look like this:
 ```

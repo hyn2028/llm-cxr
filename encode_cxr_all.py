@@ -41,7 +41,7 @@ class ImageDataset(Dataset):
             
         r = self.target_image_size / s
         s = (round(r * img.size[1]), round(r * img.size[0]))
-        img = TF.resize(img, s, interpolation=TF.InterpolationMode.LANCZOS)
+        img = TF.resize(img, s, interpolation=Image.LANCZOS)
         img = TF.center_crop(img, output_size=2 * [self.target_image_size])
         img = T.ToTensor()(img)
         img = 2.*img - 1.

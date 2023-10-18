@@ -63,6 +63,14 @@ You can access the demo server at `http://localhost:7860/` in your browser.
 
 
 ## Train LLM-CXR from scratch
+
+### Install additional dependencies
+To reproduce results, separate environments must be used for LLM training and inference, and for image encoding and decoding. Install `llm-cxr` and `llm-cxr-taming` conda virtual environment using the script below.
+```bash
+conda env create --file environment.yaml        # install llm-cxr environment
+conda env create --file environment_taming.yaml # install llm-cxr-taming environment
+```
+
 ### Prepare data
 
 > NOTE: to access the `MIMIC-CXR` dataset family, appropriate credentials are required.
@@ -108,10 +116,12 @@ Unfortunately, the dependencies of the VQ-GAN library are too old and are not co
 To encode the entire MIMIC-CXR images with VQ-GAN, run the shell script below. This will create a `mimic-cxr-256-txvloss_codebook_indices.pickle` file in the `data/` directory. This file contains the encoded (vector quantized) entire CXR images. 
 
 ```bash
+conda activate llm-cxr-taming
 python encode_cxr_all.py <vqgan_config_path> <vqgan_ckpt_path> <path_result> <paths_data_list1> <paths_data_list2> ...
 ```
 
 ```bash
+conda activate llm-cxr-taming
 python encode_cxr_all.py \
  ckpts/vqgan_mimic-cxr-256-txvloss/2023-09-05T13-56-50_mimic-cxr-256-txvloss-project-compat.yaml \
  ckpts/vqgan_mimic-cxr-256-txvloss/2023-09-05T13-56-50_mimic-cxr-256-txvloss-4e-compat.ckpt \
@@ -125,11 +135,13 @@ python encode_cxr_all.py \
 Run the shell script below for the stage 1 train.
 
 ```bash
+conda activate llm-cxr
 ./train_llmcxr_stage1.sh
 ```
 #### Stage 2
 Run the shell script below for the stage 2 train. 
 ```bash
+conda activate llm-cxr
 ./tarin_llmcxr_stage2.sh
 ```
 Before running, modify the environment variable `input_model` in the `train_llmcxr_stage2.sh` file to point to the checkpoint path of the model trained in stage1.
@@ -138,6 +150,7 @@ Before running, modify the environment variable `input_model` in the `train_llmc
 The checkpoint of the saved LLM is a ` DeepSpeed zero` checkpoint, thus, must be converted to the `pytorch_model.bin` file for inference or to continue training. Convert the checkpoint using the `zero_to_fp32.py` file created together in the created checkpoint directory. You can simply convert using the script below.
 
 ```bash
+conda activate llm-cxr
 python zero_to_fp32.py . pytorch_model.bin
 ```
 
@@ -149,9 +162,11 @@ The current settings are geared towards `NVIDIA A100 40GB x8`, but if you change
 To generate inference results for evaluation, run the shell script below. This will create a `eval_inference/` directory in the root directory. This directory contains the inference results `dolly__eval_results_0_1.pickle`. This file contains the inference results of the report-to-CXR and CXR-to-report tasks from our evaluation dataset `data/eval_dicom_ids.pickle`.
 
 ```bash 
+conda activate llm-cxr
 python generate_eval.py <model_path> <cxr_vq_path> <output_root> 
 ```
 ```bash
+conda activate llm-cxr
 python generate_eval.py ckpts/llmcxr_mimic-cxr-256-txvloss-medvqa-stage1_2 data/mimic-cxr-256-txvloss_codebook_indices.pickle eval_inference
 ```
 
@@ -159,10 +174,12 @@ python generate_eval.py ckpts/llmcxr_mimic-cxr-256-txvloss-medvqa-stage1_2 data/
 To decode the inference results, run the shell script below. This will create a `eval_inference_decoded/` directory in the root directory. The `generated_imgs_jpg/` directory contains images generated from reports, and the `generated_reports.txt` file contains reports generated from images. GT reports and generated reports are interleaved in order.
 
 ```bash
+conda activate llm-cxr-taming
 python decode_cxr_all.py <vqgan_config_path> <vqgan_ckpt_path> <output_root> <infer_result_path>
 ```
 
 ```bash
+conda activate llm-cxr-taming
 python decode_cxr_all.py \
  ckpts/vqgan_mimic-cxr-256-txvloss/2023-09-05T13-56-50_mimic-cxr-256-txvloss-project-compat.yaml \
  ckpts/vqgan_mimic-cxr-256-txvloss/2023-09-05T13-56-50_mimic-cxr-256-txvloss-4e-compat.ckpt \

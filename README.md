@@ -77,9 +77,6 @@ conda env create --file environment_taming.yaml # install llm-cxr-taming environ
 
 1. MIMIC-CXR dataset: Download the entire `MIMIC-CXR-JPG` dataset from the [MIMIC-CXR-JPG](https://physionet.org/content/mimic-cxr-jpg/2.0.0/) dataset. All downloaded files must be located under `data/mimic-cxr-jpg`. Unzip the metadata files in the `.csv.gz` format at the root of the `data/mimic-cxr-jpg` directory. Then download `mimic-cxr-reports.zip` file from the [MIMIC-CXR](https://physionet.org/content/mimic-cxr/2.0.0/) dataset, unzip it, and place the `files/` directory into the `data/mimic-cxr-jpg/reports` directory. 
 
-1. MIMIC-CXR-VQA datset: Download the `MIMIC-CXR-MEDVQA` dataset from [here](https://drive.google.com/file/d/10W3zohsNnTMVjbKXDNl5INmffVeepH95/view?usp=sharing) which is a synthesized VQA dataset using the MIMIC-CXR report through LLM. Unzip the downloaded file and place the `mimic-cxr-medvqa_v1` directory in the `data/mimic-cxr-jpg/` directory.
-
-
 1. Instruction following dataset: Download `databricks-dolly-15k.jsonl` file from [here](https://huggingface.co/datasets/databricks/databricks-dolly-15k/tree/orig_dataset) and put it in `data/` directory.
 
 Your final directory structure should look like this:
